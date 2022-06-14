@@ -1,10 +1,6 @@
 import 'reflect-metadata'
-import container from '~/di_container/tsyringe.container'
-import { HttpServer, Logger } from '~/types'
+import tsyringeContainer from '~di_container/tsyringe.container'
+import { CONTAINER, HttpServer } from '~types'
 
-const server = container.resolve<HttpServer>('server')
-const logger = container.resolve<Logger>('logger')
-
-server.start().then(() => {
-  logger.info('***Ready***')
-})
+const server = tsyringeContainer.resolve<HttpServer>(CONTAINER.HttpServer)
+server.start().then(() => console.info('***READY***'))

@@ -1,30 +1,12 @@
-import { container, Lifecycle, RegistrationOptions } from 'tsyringe'
-import UserControllerV1 from '../controllers/users/version_1/users.controller'
-import ExpressApplicationImpl from '../express-app'
-import AppRoutes from '../routes/app-routes'
-import UserRoutesV1 from '../routes/users/version_1/users.routes'
-import HttpServerImpl from '../server'
-import UserServiceImpl from '../services/users/users.service'
-import logger from '../utils/winston.logger'
+import { container as tsyringeContainer, Lifecycle, RegistrationOptions } from 'tsyringe'
+import HttpServerImpl from '~server/http-server'
+import { CONTAINER } from '~types'
+import logger from '~utils/winston.logger'
 
-const Singleton = { lifecycle: Lifecycle.Singleton } as RegistrationOptions
+const SINGLETON: RegistrationOptions = { lifecycle: Lifecycle.Singleton }
 
-container
-  // services
-  .register('user.services', { useClass: UserServiceImpl }, Singleton)
+tsyringeContainer
+  .register(CONTAINER.HttpServer, { useClass: HttpServerImpl }, SINGLETON)
+  .register(CONTAINER.Logger, { useValue: logger })
 
-  // controllers
-  .register('user.controllers:1', { useClass: UserControllerV1 }, Singleton)
-
-  // routes
-  .register('app.routes', { useClass: AppRoutes }, Singleton)
-  .register('user.routes:1', { useClass: UserRoutesV1 }, Singleton)
-
-  // utils
-  .register('logger', { useValue: logger })
-
-  // others
-  .register('app', { useClass: ExpressApplicationImpl }, Singleton)
-  .register('server', { useClass: HttpServerImpl }, Singleton)
-
-export default container
+export default tsyringeContainer

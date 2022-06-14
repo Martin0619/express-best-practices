@@ -1,8 +1,6 @@
 import config from 'config'
 import winston from 'winston'
 
-const isDev = config.get<boolean>('api.isDevEnvironment')
-
 winston.addColors({
   error: 'red',
   warn: 'yellow',
@@ -12,6 +10,7 @@ winston.addColors({
 })
 
 const logger = winston.createLogger({
+  level: config.get<boolean>('api.isDevMode') ? 'debug' : 'info',
   levels: {
     error: 0,
     warn: 1,
@@ -19,11 +18,10 @@ const logger = winston.createLogger({
     http: 3,
     debug: 4,
   },
-  level: isDev ? 'debug' : 'info',
-  transports: [new winston.transports.Console()],
+  transports: new winston.transports.Console(),
   format: winston.format.combine(
-    winston.format.colorize({ all: true }),
     winston.format.timestamp({ format: 'MMM DD, YYYY HH:mm:ss:ms' }),
+    winston.format.colorize({ all: true }),
     winston.format.printf((info) => `${info.level} ${info.timestamp} ${info.message}`)
   ),
 })
