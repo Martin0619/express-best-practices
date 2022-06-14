@@ -1,0 +1,4 @@
+@url=http://localhost:5445/api/v1/users
+
+###
+GET {{url}} HTTP/1.1

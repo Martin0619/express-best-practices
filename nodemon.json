@@ -1,0 +1,12 @@
+{
+  "restartable": true,
+  "ignore": ["test", "build", "node_modules"],
+  "watch": ["src", "config", "swagger.json"],
+  "execMap": {
+    "ts": "node -r ts-node/register -r tsconfig-paths/register"
+  },
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ext": "ts,josn"
+}
